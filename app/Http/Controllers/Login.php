@@ -26,14 +26,21 @@ class Login extends Controller
         if($userdata)
         {
             if(Hash::check($req->password, $userdata->password)){
+                if($userdata -> status == 0)
+                {
+                    return back()->with('error', 'Your account is waiting for admin approval');
+                }else{
                 $req->session()->put('loginId',$userdata->id);
                 $req->session()->put('user_name',$userdata->name);
+                $req->session()->put('status',$userdata->status);
+                $req->session()->put('user_role',$userdata->user_role);
                 $s = session()->all();
 
                 // echo '<pre>';
                 // print_r($s); 
 
                 return redirect(route('home'));
+                }
             }else{
                 return back()->with('error', 'password do not match');
             } 

@@ -17,10 +17,15 @@ class TaskManager extends Controller
     {
         //
         //$assign = User::get()->where('assign_to_id' , Session::get('loginId'));
-        if(Session::get('loginId') === 1)
+        if(Session::get('user_role') === "S")
         {
             $task = Task::get();
-        }else{
+        }else if(Session::get('user_role') === "A"){
+            $task = Task::where('assign_to_id','=',Session::get('loginId'))
+            ->orWhere('publisher_id','=',Session::get('loginId'))
+            ->get();
+        }
+        else{
             $task = Task::get()->where('assign_to_id' , Session::get('loginId'));
         }
 
@@ -52,7 +57,18 @@ class TaskManager extends Controller
                 'value' => 'Emergency',
             ]
         ];
-        $assign = User::orderby('id','desc')->get();
+
+        if(Session::get('user_role') == "S"){
+            $assign = User::where('user_role','!=','G')
+            ->where('user_role','!=','S')
+            ->get();
+        }else if(Session::get('user_role') == "A"){
+            $assign = User::where('user_role','=','U')
+            ->get();
+        }else{
+            $assign = User::where('id','=',Session::get('loginId'))
+            ->get();;
+        }
         return view('/Task/TaskCreate', compact('statuses','assign'));
         //return view('/Task/TaskCreate') ;
     }
@@ -79,8 +95,8 @@ class TaskManager extends Controller
         $task = new Task();
         $task->title = $request->title;
         $task->description = $request->description;
-        $task->publisher_name = "Admin";
-        $task->publisher_id = "1";
+        $task->publisher_name = Session::get('user_name');
+        $task->publisher_id = Session::get('loginId');
         $task->assign_to_name = $request->assign_to;
         $task->assign_to_id = $user->id;
         $task->status = $request->status;
@@ -122,8 +138,19 @@ class TaskManager extends Controller
                 'label' => 'Emergency',
                 'value' => 'Emergency',
             ]
-        ];
-        $assign = User::get();
+        ]; 
+        
+        if(Session::get('user_role') == "S"){
+            $assign = User::where('user_role','!=','G')
+            ->where('user_role','!=','S')
+            ->get();
+        }else if(Session::get('user_role') == "A"){
+            $assign = User::where('user_role','=','U')
+            ->get();
+        }else{
+            $assign = User::where('id','=',Session::get('loginId'))
+            ->get();;
+        }
         
         return view('/Task/TaskEdit', compact('statuses','assign','task'));
     }
@@ -135,6 +162,7 @@ class TaskManager extends Controller
     {
         //
         $task = Task::findOrFail($id);
+        
         $request->validate([
             'title' => 'required'
         ]);
@@ -151,8 +179,8 @@ class TaskManager extends Controller
 
         $task->title = $request->title;
         $task->description = $request->description;
-        $task->publisher_name = "Admin";
-        $task->publisher_id = "1";
+        $task->publisher_name = $task->publisher_name;
+        $task->publisher_id = $task->publisher_id;
         $task->assign_to_name = $request->assign_to;
         $task->assign_to_id = $user->id;
         $task->status = $request->status;

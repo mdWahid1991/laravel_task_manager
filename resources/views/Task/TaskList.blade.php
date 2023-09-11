@@ -2,9 +2,9 @@
 @section('title', 'Task Lists')
 @section('content')
 <div class="row d-flex flex-column mt-4">
-    <div class="d-flex justify-content-around" >
+    <div class="d-flex justify-content-around" > 
     <h2>Task List</h2>
-    @if(Session::get('loginId') === 1)
+    @if(Session::get('user_role') === "S" || Session::get('user_role') === "A")
     <a href="{{route('taskcreate')}}" class="btn btn-info float-right text-center"> Create Task</a>
     @endif
     </div>
@@ -14,6 +14,9 @@
             <h4>{{$t->title}}  
                 <span class="badge rounded-pill bg-warning text-dark"> {{$t->created_at->diffForHumans()}}</span>
             </h4>
+            <h6>
+                Published By: {{$t->publisher_name}} 
+            </h6>
         </div>
 
         <div class="card-body">
@@ -28,7 +31,7 @@
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                         View
                     </button>
-                    {{-- modal --}}
+  {{-- //////////////////////////modal//////////////////////////////////////// --}}
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -70,7 +73,7 @@
     </div>
   </div>
                     <a href="{{route('taskedit' ,['id'=> $t->id])}}" class="btn btn-success">Edit </a>
-                    @if((Session::get('loginId') === 1))
+                    @if(Session::get('user_role') === "S" || Session::get('user_role') === "A")
                     <a href="{{route('taskdelete' ,['id'=> $t->id])}}" class="btn btn-danger">Delete </a>
                     @endif
                 </div>

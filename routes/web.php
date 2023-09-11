@@ -36,3 +36,8 @@ Route::get('/taskedit/{id}', [TaskManager::class, 'edit'])->name('taskedit')->mi
 Route::post('/taskupdate/{id}', [TaskManager::class, 'update'])->name('taskupdate')->middleware('isLoggedIn');
 
 Route::get('/taskdelete/{id}', [TaskManager::class, 'destroy'])->name('taskdelete');
+
+Route::get('/userlist', [Register::class, 'user_list'])->name('userlist');
+Route::get('/useredit/{id}', [Register::class, 'user_edit'])->name('useredit');
+Route::post('/userupdate/{id}', [Register::class, 'user_update'])->name('userupdate');
+//Route::get('/userdelete/{id}', [Register::class, 'user_list'])->name('userdelete');

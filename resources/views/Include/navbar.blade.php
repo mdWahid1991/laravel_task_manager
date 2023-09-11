@@ -14,6 +14,11 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{{route('task')}}">View Task</a>
             </li>
+            @if(Session::get('user_role') == "S")
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{route('userlist')}}">User List</a>
+            </li>
+            @endif
             @endif
             
         </ul>

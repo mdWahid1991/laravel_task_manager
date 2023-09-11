@@ -11,7 +11,15 @@ class Register extends Controller
 {
     //
     public function index(){
+        $user = User::get();
         return view('registration');
+    }
+
+    public function user_list(){
+        $user = User::where('user_role', '!=' , 'S')
+        ->get();
+        $data = compact('user');
+        return view('/User/userlist')->with($data);
     }
 
     public function register(Request $req){
@@ -32,5 +40,50 @@ class Register extends Controller
             return redirect(route('reg'))->with("error", "Registration unsuccessful");
         }
         return redirect(route('log'))->with("success","Registratiom Successful");;
+    }
+    public function user_edit($id){
+        $user = User::findOrFail($id);
+        $status = [
+            [
+                'label' => 'active',
+                'value' => 1,
+            ],
+            [
+                'label' => 'inactive',
+                'value' => 0,
+            ]
+        ];
+
+        $role = [
+            [
+                'label' => 'Admin',
+                'value' => 'A',
+            ],
+            [
+                'label' => 'User',
+                'value' => 'U',
+            ],
+            [
+                'label' => 'Guest',
+                'value' => 'G',
+            ]
+        ];
+
+        return view('/User/userlistedit', compact('status','role', 'user'));
+    }
+
+    public function user_update($id , Request $req){
+        $user = User::findOrFail($id);
+
+        $user->status = $req->status;
+        $user->user_role = $req->user_role;
+
+        $user->save();
+
+        return redirect()->route('userlist');
+    }
+
+    public function user_delete($id){
+        
     }
 }

@@ -1,5 +1,5 @@
    @extends('layout')
-   @section('title', 'login')
+   @section('title', 'Login')
     {{-- body content --}}
    @section('content')
     <div>

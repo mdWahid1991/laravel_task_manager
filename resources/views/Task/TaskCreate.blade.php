@@ -26,7 +26,7 @@
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Assign To</label>
-            <select name="assign_to" id="" class="form-control">
+            <select name="assign_to" id="" class="form-control form-select">
                 @foreach ($assign as $ass)
                     <option value="{{ $ass->name }}">{{ $ass->name }}</option>
                 @endforeach
@@ -34,7 +34,7 @@
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Status</label>
-            <select name="status" id="status" class="form-control">
+            <select name="status" id="status" class="form-control form-select">
                 @foreach ($statuses as $status)
                     <option value="{{ $status['value'] }}">{{ $status['label'] }}</option>
                 @endforeach
